@@ -1,0 +1,51 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+    font-family: 'Amatic SC', cursive;
+    /* font-family: 'Patua One', cursive; */
+	background-color: white;
+	color: #333;
+	margin-left: 200px;
+	margin-right: 300px;
+	margin-top: 20px;
+}
+
+h1 {
+    font-family: 'Amatic SC', cursive;
+    /* font-family: 'Patua One', cursive; */
+        text-align:center;
+	color: #575757;
+	font-size: 4.1em;
+	font-weight: bold;
+}
+
+p {
+        text-align:center;
+        font-family: 'Patua One', cursive;
+	font-weight:300;
+        font-size: 50px;
+	color: #474747;
+	line-height:140%
+}
+
+form {
+        text-align:center;
+        font-family: 'Patua One', cursive;
+	font-weight:300;
+        font-size: 14px;
+	color: #474747;
+	line-height:140%
+}
+
+figure {
+	/* float: center; */
+	float: right;
+	margin-right: 360px;
+	display:inline;
+}
+
+a {
+	link color:#99CC99;    /* unvisited link */
+	visited color:#99CC99; /* visited link */
+}
