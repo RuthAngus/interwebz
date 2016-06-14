@@ -27,7 +27,6 @@ def extract_tables(fh):
     Extracts tables from latex file and returns a list of strings.
     One string for each table.
     """
-    print(fh)
     with tarfile.open(fileobj=fh) as f:
         for mem in f.getmembers():
             if not fnmatch.fnmatch(mem.name, "*.tex"):
@@ -52,17 +51,43 @@ def read_table(table):
     Takes a latex table as a list of strings (one per line) and extracts the
     data.
     Returns an array of data.
+    SO MANY BUGS IN THIS RIGHT NOW!
     """
-    for i, line in enumerate(table):
-        # if line.find("begin{tabular}"):
-        if "begin{tabular}" in line:
-            start = i + 1
-        elif "end{tabular}" in line:
-            end = i
-    just_data = table[start:end]
-    header = just_data[0]
-    print(header)
-    input("")
+
+    data = []
+    for i, line in enumerate(table):  # alternatively, detect "&"s
+        if "&" in line:
+            data.append(line.split("&"))  # shape: rows, columns
+
+    column_headers = data[0]
+    column_units = data[1]
+    data_array = np.array(data[2:])
+
+    # find all the floats
+    numeric_const_pattern = r"""
+        [-+]? # optional sign
+        (?:
+            (?: \d* \. \d+ ) # .1 .12 .123 etc 9.1 etc 98.1 etc
+            |
+            (?: \d+ \.? ) # 1. 12. 123. etc 1 12 123 etc
+        )
+        # followed by optional exponent part if desired
+        (?: [Ee] [+-]? \d+ ) ?
+        """
+    rx = re.compile(numeric_const_pattern, re.VERBOSE)
+
+    # extract the floats from a line and create an array of the data
+    data_stack = []
+    for row in data_array:
+        float_line = []
+        for entry in row:
+            floats = rx.findall(entry)
+            if len(floats):
+                float_line.append(float(floats[0]))
+            else:
+                float_line.append(np.nan)
+        data_stack.append(float_line)
+    return np.array(data_stack), column_headers, column_units
 
 
 def load_tables(arxiv_number):
@@ -72,11 +97,14 @@ def load_tables(arxiv_number):
     """
     with open("{0}".format(str(arxiv_number)), "rb") as f:
         tables = extract_tables(f)
-    data_list = []
+    data_list, header_list, unit_list = [], [], []
     for table in tables:
-        data_list.append(read_table(table))
-    return data_list
+        dat, head, unit = read_table(table)
+        data_list.append(dat)
+        header_list.append(head)
+        unit_list.append(unit)
+    return data_list, header_list, unit_list
 
 
 if __name__ == "__main__":
-    load_tables("1605.08574v1")
+    data_list = load_tables("1605.08574v1")

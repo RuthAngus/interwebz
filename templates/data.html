@@ -11,7 +11,17 @@
 <link href="static/beta.css" rel="stylesheet" type="text/css">
 </head>
 
-<h1>Tables found</h1>
+<h1>{{ ntables }} Tables found</h1>
+
+{% for table in range(ntables) %}
+    <p> Table {{ table }} </p>
+{% endfor %}
+
+
+<title>found</title>
+{% if header %}
+  <p> {{ header }}</p>
+{% endif %}
 
 <title>found</title>
 {% if data %}
