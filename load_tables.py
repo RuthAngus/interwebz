@@ -10,6 +10,7 @@ import fnmatch
 import requests
 import feedparser
 import numpy as np
+import os
 
 URL = "http://arxiv.org/rss/astro-ph"
 COMMENT_RE = re.compile(r"(?<!\\)%")
@@ -89,13 +90,18 @@ def read_table(table):
         data_stack.append(float_line)
     return np.array(data_stack), column_headers, column_units
 
+def tex_files(members):
+    for tarinfo in members:
+        if os.path.splitext(tarinfo.name)[1] == ".tex":
+            yield tarinfo
 
 def load_tables(arxiv_number):
     """
     Takes an ArXiv id and returns a list of arrays.
     Each array contains the data in a table in the paper.
     """
-    with open("{0}".format(str(arxiv_number)), "rb") as f:
+    file = "data/{0}.tar.gz".format(str(arxiv_number))
+    with open(file, "rb") as f:
         tables = extract_tables(f)
     data_list, header_list, unit_list = [], [], []
     for table in tables:
