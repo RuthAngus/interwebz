@@ -32,9 +32,9 @@ def select_variables(tnumber):
     with open("number.txt", "r") as f:
         arxiv_number = f.read()
     data_list, header_list, unit_list = load_tables(arxiv_number)
-    return render_template('table.html', ntables=len(data_list),
-                           header="{0}".format(header_list[0]),
-                           data="{0}".format(data_list[0]))
+    return render_template('table.html',
+                           header="{0}".format(header_list[tnumber]),
+                           data="{0}".format(data_list[tnumber]))
 
 
 if __name__ == '__main__':
