@@ -12,11 +12,12 @@ def index():
 
 
 # Parse form entry to load_tex and return result
-@app.route('/load-tex', methods=["POST"])
+@app.route('/load-table', methods=["POST"])
 def scrape():
     arxiv_number = str(request.form["arxiv_number"])
     text = load_tex(arxiv_number)
-    return "{0}".format(text)
+    return render_template('data.html', data="{0}".format(text))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
