@@ -1,6 +1,7 @@
 # http://127.0.0.1:5000/
 import numpy as np
 from load_tables import load_tables
+from html_tooltips import make_html_fig
 from arxiv import get_article
 from flask import Flask, request
 from flask import render_template
@@ -18,8 +19,8 @@ def index():
 def scrape():
     arxiv_number = str(request.form["arxiv_number"])
     with open("number.txt", "w") as f:
-        f.write("{0}v1".format(arxiv_number))
-    get_article(arxiv_number)
+        f.write("{0}".format(arxiv_number))
+    get_article("{0}".format(arxiv_number))
     data_list, header_list, unit_list = load_tables(arxiv_number)
     return render_template('data.html', ntables=len(data_list),
                            header="{0}".format(header_list[0]),
@@ -35,6 +36,13 @@ def select_variables(tnumber):
     return render_template('table.html',
                            header="{0}".format(header_list[tnumber]),
                            data="{0}".format(data_list[tnumber]))
+
+
+# test inserting figure
+@app.route('/figure')
+def make_figure():
+    make_html_fig()
+    return render_template('html_tooltips.html')
 
 
 if __name__ == '__main__':

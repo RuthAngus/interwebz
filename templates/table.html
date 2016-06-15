@@ -11,6 +11,11 @@
 <link href="../static/beta.css" rel="stylesheet" type="text/css">
 </head>
 
+
+<p><a href="{{ url_for('make_figure')}}">
+    PLOT
+</a></p>
+
 <title>found</title>
 {% if header %}
   <p> {{ header }}</p>
@@ -21,5 +26,4 @@
   <p> {{ data }}</p>
 {% endif %}
 
-</body>
 </html>

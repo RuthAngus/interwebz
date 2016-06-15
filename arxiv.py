@@ -54,7 +54,7 @@ def get_article(arxiv_id, clobber=False):
 
     # Download the remote file.
     if clobber or not os.path.exists(local):
-        url = "http://arxiv.org/e-print/{0}".format(arxiv_id)
+        url = "http://arxiv.org/e-print/{0}v1".format(arxiv_id)
         r = requests.get(url)
         code = r.status_code
         if code != requests.codes.ok:
