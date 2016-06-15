@@ -40,9 +40,11 @@ def extract_tables(fh):
             tables = []
             lines = np.array(txt.splitlines())
             for i, line in enumerate(lines):
-                if line[1:12] == "begin{table":
+                if line[1:12] == "begin{table" or \
+                        line[1:18] == "begin{deluxetable":
                     beg_ind = i
-                elif line[1:10] == "end{table":
+                elif line[1:10] == "end{table" or \
+                    line[1:16] == "end{deluxetable":
                     end_ind = i
                     tables.append(lines[beg_ind:end_ind])
     return tables
@@ -113,4 +115,7 @@ def load_tables(arxiv_number):
 
 
 if __name__ == "__main__":
-    data_list = load_tables("1605.08574v1")
+    # data_list = load_tables("1605.08574v1")
+    data_list, header_list, unit_list = \
+        data_list = load_tables("1606.01926v1")
+    print(data_list)

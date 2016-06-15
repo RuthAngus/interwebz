@@ -18,7 +18,7 @@ def index():
 def scrape():
     arxiv_number = str(request.form["arxiv_number"])
     with open("number.txt", "w") as f:
-        f.write("{0}".format(arxiv_number))
+        f.write("{0}v1".format(arxiv_number))
     get_article(arxiv_number)
     data_list, header_list, unit_list = load_tables(arxiv_number)
     return render_template('data.html', ntables=len(data_list),
