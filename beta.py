@@ -5,6 +5,7 @@ from html_tooltips import make_html_fig
 from arxiv import get_article
 from flask import Flask, request
 from flask import render_template
+from flask import g
 app = Flask(__name__)
 
 
@@ -18,6 +19,7 @@ def index():
 @app.route('/find-tables', methods=["POST"])
 def scrape():
     arxiv_number = str(request.form["arxiv_number"])
+    # g.an = arxiv_number
     with open("number.txt", "w") as f:
         f.write("{0}".format(arxiv_number))
     get_article("{0}".format(arxiv_number))
@@ -32,16 +34,17 @@ def scrape():
 def select_variables(tnumber):
     with open("number.txt", "r") as f:
         arxiv_number = f.read()
+    # arxiv_number = g.get('an')
     data_list, header_list, unit_list = load_tables(arxiv_number)
     header_list = header_list[tnumber]
     header_list = [i.replace("$", "") for i in header_list]
-    header_list = [1, 2, 3, 4, 5]
+    header_list = [i.replace("\\", "") for i in header_list]
     header_list = ["\\({0}\\)".format(i) for i in header_list]
     ncolumns = len(header_list)
     data = data_list[tnumber]
     return render_template('table.html',
-                           header_list="{0}".format(header_list),
-                           data="{0}".format(data.T[0]))
+                           header_list=header_list,
+                           data=list(data.T[0]), ncolumns=ncolumns)
 
 
 # test inserting figure
