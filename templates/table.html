@@ -26,12 +26,12 @@
 </style>
 
 <table class="tg">
-<th> {% for i in range(ncolumns) %}
+{% for i in range(ncolumns) %}
     <th class="tg-yw4l">{{ header_list[i] }}</th>
     {% endfor %}
-{% for j in range(ncolumns) %}
+{% for j in range(nrows) %}
   <tr> {% for i in range(ncolumns) %}
-      <th class="tg-yw4l">{{ data[i] }}</th>
+      <th class="tg-yw4l">{{ data[j][i] }}</th>
       {% endfor %}
   </tr>
 {% endfor %}

@@ -42,9 +42,11 @@ def select_variables(tnumber):
     header_list = ["\\({0}\\)".format(i) for i in header_list]
     ncolumns = len(header_list)
     data = data_list[tnumber]
+    # data = np.ones((ncolumns, ncolumns)) + range(ncolumns)
+    nrows = len(data)
     return render_template('table.html',
                            header_list=header_list,
-                           data=list(data.T[0]), ncolumns=ncolumns)
+                           data=data, ncolumns=ncolumns, nrows=nrows)
 
 
 # test inserting figure
