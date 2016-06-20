@@ -33,9 +33,15 @@ def select_variables(tnumber):
     with open("number.txt", "r") as f:
         arxiv_number = f.read()
     data_list, header_list, unit_list = load_tables(arxiv_number)
+    header_list = header_list[tnumber]
+    header_list = [i.replace("$", "") for i in header_list]
+    header_list = [1, 2, 3, 4, 5]
+    header_list = ["\\({0}\\)".format(i) for i in header_list]
+    ncolumns = len(header_list)
+    data = data_list[tnumber]
     return render_template('table.html',
-                           header="{0}".format(header_list[tnumber]),
-                           data="{0}".format(data_list[tnumber]))
+                           header_list="{0}".format(header_list),
+                           data="{0}".format(data.T[0]))
 
 
 # test inserting figure

@@ -30,6 +30,18 @@ p {
 	line-height:140%
 }
 
+t1 {
+        font-family: 'Amatic SC', cursive;
+	font-weight:300;
+        font-size: 20px;
+	color: #474747;
+	line-height:140%
+}
+
+t2.inline {
+    display: inline;
+}
+
 form {
         text-align:center;
         /* font-family: 'Patua One', cursive; */
