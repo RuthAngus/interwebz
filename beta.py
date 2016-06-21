@@ -32,21 +32,16 @@ def scrape():
 # Display table and select variables
 @app.route('/table/<int:tnumber>', methods=["GET", "POST"])
 def select_variables(tnumber):
-    with open("number.txt", "r") as f:
+    with open("number.txt", "r") as f:  # FIXME: use g instead
         arxiv_number = f.read()
-    # arxiv_number = g.get('an')
+    # arxiv_number = g.get('an')  # attempt failed
     data_list, header_list, unit_list = load_tables(arxiv_number)
-    header_list = header_list[tnumber]
-    header_list = [i.replace("$", "") for i in header_list]
-    header_list = [i.replace("\\", "") for i in header_list]
-    header_list = ["\\({0}\\)".format(i) for i in header_list]
-    ncolumns = len(header_list)
-    data = data_list[tnumber]
-    # data = np.ones((ncolumns, ncolumns)) + range(ncolumns)
-    nrows = len(data)
-    return render_template('table.html',
-                           header_list=header_list,
-                           data=data, ncolumns=ncolumns, nrows=nrows)
+    headers, data = header_list[tnumber], data_list[tnumber]  # select table
+    headers = [i.replace("$", "") for i in headers]  # clean up data
+    headers = [i.replace("\\", "") for i in headers]  # clean up data
+    ncolumns, nrows = len(headers), len(data)
+    return render_template('table.html', header_list=headers, data=data,
+                           ncolumns=ncolumns, nrows=nrows)
 
 
 # test inserting figure

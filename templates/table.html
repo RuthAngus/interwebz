@@ -1,37 +1,77 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
-<!-- <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'> -->
-<link href='https://fonts.googleapis.com/css?family=Amatic+SC|Patua+One' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Amatic+SC|Patua+One'
+rel='stylesheet' type='text/css'>
 
 <html>
 <head>
+
+<!-- Use mathjax -->
 <script type="text/javascript" async
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
+
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <title>BETA</title>
 <link href="*" rel="stylesheet" type="text/css">
-<link href="../static/beta.css" rel="stylesheet" type="text/css">
+<link href="{{ url_for('.static', filename='beta.css') }}" rel="stylesheet"
+    type="text/css">
+
+
+<!-- Use drag and drop -->
+<style>
+#div1, #div2
+{float:left; width:100px; height:35px; margin:10px;padding:10px;
+    border:1px solid #aaaaaa;}
+</style>
+<script>
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+}
+</script>
+
+<!-- Formatting for table -->
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;
+       border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;
+       padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;
+       word-break:normal;}
+.tg .tg-yw4l{vertical-align:top}
+</style>
+
 </head>
 
+<!-- Drag and drop -->
+<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <img src="{{ url_for('.static', filename='x.png') }}" draggable="true" ondragstart="drag(event)" id="drag1">
+</div>
+<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+
+<!-- Plot link -->
 <p><a href="{{ url_for('make_figure')}}">
     PLOT
 </a></p>
 
-<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg .tg-yw4l{vertical-align:top}
-</style>
-
+<!-- Table -->
 <table class="tg">
 {% for i in range(ncolumns) %}
-    <th class="tg-yw4l">{{ header_list[i] }}</th>
+    <th class="tg-yw4l">\({{ header_list[i] }}\)</th>
     {% endfor %}
 {% for j in range(nrows) %}
   <tr> {% for i in range(ncolumns) %}
-      <th class="tg-yw4l">{{ data[j][i] }}</th>
+      <th class="tg-yw4l">\({{ data[j][i] }}\)</th>
       {% endfor %}
   </tr>
 {% endfor %}
