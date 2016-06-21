@@ -55,17 +55,24 @@ function drop(ev) {
 
 <!-- Drag and drop -->
 <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
-    <img src="{{ url_for('.static', filename='x.png') }}" draggable="true" ondragstart="drag(event)" id="drag1">
+    <img src="{{ url_for('.static', filename='x.png') }}" draggable="true"
+              ondragstart="drag(event)" id="drag1">
 </div>
-<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
 
-<!-- Plot link -->
-<p><a href="{{ url_for('make_figure')}}">
-    PLOT
-</a></p>
+<!-- <1!-- Plot link --1> -->
+<!-- <p><a href="{{ url_for('make_figure')}}"> -->
+<!--     PLOT -->
+<!-- </a></p> -->
 
 <!-- Table -->
 <table class="tg">
+
+<tr>
+{% for i in range(ncolumns) %}
+        <th class="tg-yw4l"><div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div></th>
+    {% endfor %}
+</tr>
+
 {% for i in range(ncolumns) %}
     <th class="tg-yw4l">\({{ header_list[i] }}\)</th>
     {% endfor %}
