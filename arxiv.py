@@ -15,7 +15,7 @@ import subprocess
 from bs4 import BeautifulSoup
 import sys
 
-from nltk import sent_tokenize, word_tokenize
+# from nltk import sent_tokenize, word_tokenize
 
 
 DATA_DIR = "data"
@@ -25,26 +25,26 @@ def clean_word(w):
     return w.strip("$*")
 
 
-def parse_tex(tex):
-    # Use pandoc to convert .tex to .html
-    with tempfile.NamedTemporaryFile(suffix=".tex") as tex_f:
-        tex_f.write(tex)
-        tex_f.flush()
-        with tempfile.NamedTemporaryFile(suffix=".html") as txt_f:
-            subprocess.check_call(["pandoc", tex_f.name, "-o", txt_f.name])
-            body = txt_f.read().decode("utf-8")
+# def parse_tex(tex):
+#     # Use pandoc to convert .tex to .html
+#     with tempfile.NamedTemporaryFile(suffix=".tex") as tex_f:
+#         tex_f.write(tex)
+#         tex_f.flush()
+#         with tempfile.NamedTemporaryFile(suffix=".html") as txt_f:
+#             subprocess.check_call(["pandoc", tex_f.name, "-o", txt_f.name])
+#             body = txt_f.read().decode("utf-8")
 
-    # Parse the HTML.
-    tree = BeautifulSoup(body)
-    paragraphs = []
-    for p in tree.find_all("p"):
-        txt = p.text
-        if not len(txt):
-            continue
-        paragraphs.append(map(word_tokenize, sent_tokenize(txt)))
+#     # Parse the HTML.
+#     tree = BeautifulSoup(body)
+#     paragraphs = []
+#     for p in tree.find_all("p"):
+#         txt = p.text
+#         if not len(txt):
+#             continue
+#         paragraphs.append(map(word_tokenize, sent_tokenize(txt)))
 
-    return [[w for w in map(clean_word, s) if len(w)]
-            for p in paragraphs for s in p if len(s)]
+#     return [[w for w in map(clean_word, s) if len(w)]
+#             for p in paragraphs for s in p if len(s)]
 
 
 def get_article(arxiv_id, clobber=False):
@@ -76,7 +76,7 @@ def get_article(arxiv_id, clobber=False):
 
     print("Found {0} tex file(s)".format(len(tex)))
 
-    return [s for p in map(parse_tex, tex) for s in p if len(s)]
+    # return [s for p in map(parse_tex, tex) for s in p if len(s)]
 
 
 if __name__ == "__main__":
