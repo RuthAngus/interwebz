@@ -18,6 +18,8 @@ URL = "http://arxiv.org/rss/astro-ph"
 COMMENT_RE = re.compile(r"(?<!\\)%")
 AMP_RE = re.compile(r"(?<!\\)&")
 
+DATA_DIR = os.environ.get("ARXIV_DATA_DIR", "data")
+
 def run():
     tree = feedparser.parse(URL)
     for entry in tree.entries:
@@ -104,7 +106,7 @@ def load_tables(arxiv_number):
     Takes an ArXiv id and returns a list of arrays.
     Each array contains the data in a table in the paper.
     """
-    file = "data/{0}.tar.gz".format(str(arxiv_number))
+    file = os.path.join(DATA_DIR, "{0}.tar.gz".format(str(arxiv_number)))
     with open(file, "rb") as f:
         tables = extract_tables(f)
     data_list, header_list, unit_list = [], [], []
