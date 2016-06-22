@@ -8,7 +8,7 @@ from bokeh.plotting import Figure, output_file, save
 # currently takes Pandas DataFrame as input; haven't tested
 # other formats such as astropy tables
 
-output_file("callback.html") # currently writes to a file
+output_file("templates/callback.html") # currently writes to a file
 # should change to output JS and HTML strings to pass to template
 
 def get_error_tuples(val,err,pos,alpha=0.6):
