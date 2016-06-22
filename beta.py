@@ -5,9 +5,14 @@ from html_tooltips import make_html_fig
 from arxiv import get_article
 from flask import Flask, request
 from flask import render_template
-from flask import g
+from astropy.table import Table
+from flask import session
+import pandas as pd
+
 app = Flask(__name__)
 
+secret_key = np.genfromtxt("secret_key.txt", dtype=str)
+app.secret_key = "23B9FD8E7EAE4964FD4F15F857DB7"
 
 # Render the front page
 @app.route('/')
@@ -28,26 +33,28 @@ def scrape():
                            header="{0}".format(header_list[0]),
                            data="{0}".format(data_list[0]))
 
-
 # Display table and select variables
 @app.route('/table/<int:tnumber>', methods=["GET", "POST"])
 def select_variables(tnumber):
     with open("number.txt", "r") as f:  # FIXME: use g instead
         arxiv_number = f.read()
-    # arxiv_number = g.get('an')  # attempt failed
     data_list, header_list, unit_list = load_tables(arxiv_number)
     headers, data = header_list[tnumber], data_list[tnumber]  # select table
     headers = [i.replace("$", "") for i in headers]  # clean up data
     headers = [i.replace("\\", "") for i in headers]  # clean up data
     ncolumns, nrows = len(headers), len(data)
+    mydict = dict(zip(headers, data.T))
+    table = pd.DataFrame(mydict)
+    session["tab"] = table.to_json()
     return render_template('table.html', header_list=headers, data=data,
                            ncolumns=ncolumns, nrows=nrows)
-
 
 # test inserting figure
 @app.route('/figure')
 def make_figure():
     make_html_fig()
+    table = session.get("tab")
+    return "{}".format(table)
     return render_template('html_tooltips.html')
 
 
