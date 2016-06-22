@@ -12,6 +12,8 @@ import feedparser
 import numpy as np
 import os
 
+from contextlib import closing
+
 URL = "http://arxiv.org/rss/astro-ph"
 COMMENT_RE = re.compile(r"(?<!\\)%")
 AMP_RE = re.compile(r"(?<!\\)&")
@@ -32,7 +34,7 @@ def extract_tables(fh):
         for mem in f.getmembers():
             if not fnmatch.fnmatch(mem.name, "*.tex"):
                 continue
-            with f.extractfile(mem) as txtf:
+            with closing(f.extractfile(mem)) as txtf:
                 txt = txtf.read()
             txt = txt.decode("utf-8")
 

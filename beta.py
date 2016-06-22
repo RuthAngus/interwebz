@@ -13,7 +13,7 @@ import pandas as pd
 
 app = Flask(__name__)
 
-secret_key = np.genfromtxt("secret_key.txt", dtype=str)
+#secret_key = np.genfromtxt("secret_key.txt", dtype=str)
 app.secret_key = "23B9FD8E7EAE4964FD4F15F857DB7"
 
 # Render the front page
