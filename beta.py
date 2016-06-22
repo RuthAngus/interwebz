@@ -1,13 +1,14 @@
 # http://127.0.0.1:5000/
 import numpy as np
 from load_tables import load_tables
-from html_tooltips import make_html_fig
+#from html_tooltips import make_html_fig
 from arxiv import get_article
+from collections import OrderedDict
 from flask import Flask, request
 from flask import render_template
 from astropy.table import Table
 from flask import session
-from ruth_bokeh_plot import do_a_plot
+from bokeh_plot import do_a_plot
 import pandas as pd
 
 app = Flask(__name__)
@@ -45,14 +46,15 @@ def select_variables(arxiv_number, tnumber):
 # test inserting figure
 @app.route('/table/<arxiv_number>/<int:tnumber>/figure')
 def make_figure(arxiv_number, tnumber):
-    table = format_data(arxiv_number, tnumber)
-    # do_a_plot(table)
+    table, headers, data, ncolumns, nrows = format_data(arxiv_number, tnumber)
+    #print table
+    do_a_plot(table)
     # t = session.get("tab")  # load the json of the data
     # panda = pd.read_json(t)  # parse this to bokeh
     # arr = panda.as_matrix().T
     # table = make_html_fig(arr)
     # do_a_plot(panda)
-    return render_template('callback.html')
+    return render_template('bokeh_plot.html')
 
 
 def format_data(arxiv_number, tnumber):
@@ -61,7 +63,7 @@ def format_data(arxiv_number, tnumber):
     headers = [i.replace("$", "") for i in headers]  # clean up data
     headers = [i.replace("\\", "") for i in headers]  # clean up data
     ncolumns, nrows = len(headers), len(data)
-    mydict = dict(zip(headers, data.T))  # make a dictionary of data
+    mydict = OrderedDict(zip(headers, data.T))  # make a dictionary of data
     table = pd.DataFrame(mydict)  # make a pandas dataframe of data
     # session["tab"] = table.to_json()  # convert pandas df to json
     return table, headers, data, ncolumns, nrows
