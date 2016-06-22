@@ -18,7 +18,7 @@ import sys
 # from nltk import sent_tokenize, word_tokenize
 
 
-DATA_DIR = "data"
+DATA_DIR = os.environ.get("ARXIV_DATA_DIR", "data")
 
 
 def clean_word(w):
