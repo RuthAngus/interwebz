@@ -7,6 +7,7 @@ from flask import Flask, request
 from flask import render_template
 from astropy.table import Table
 from flask import session
+from bokeh import do_a_plot
 import pandas as pd
 
 app = Flask(__name__)
@@ -57,7 +58,9 @@ def make_figure():
     arr = panda.as_matrix().T
     table = make_html_fig(arr)
     # return "{}".format(table)
-    return render_template('html_tooltips.html')
+    do_a_plot(panda)
+    return render_template('callback.html')
+    # return render_template('html_tooltips.html')
 
 
 if __name__ == '__main__':
