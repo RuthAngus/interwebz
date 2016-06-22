@@ -18,27 +18,12 @@ rel='stylesheet' type='text/css'>
     type="text/css">
 
 
-<!-- Use drag and drop -->
-<style>
-#div1, #div2
-{float:left; width:100px; height:35px; margin:10px;padding:10px;
-    border:1px solid #aaaaaa;}
-</style>
-<script>
-function allowDrop(ev) {
-    ev.preventDefault();
-}
-
-function drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
-}
-
-function drop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
-}
-</script>
+<!-- <1!-- Formatting for drag and drop --1> -->
+<!-- <style> -->
+<!-- #div1, #div2, #div3, #div4, #div5, #div6, #div7 -->
+<!-- {float:left; width:70px; height:45px; margin:10px;padding:10px; -->
+<!--     border:1px solid #aaaaaa;} -->
+<!-- </style> -->
 
 <!-- Formatting for table -->
 <style type="text/css">
@@ -51,27 +36,65 @@ function drop(ev) {
 .tg .tg-yw4l{vertical-align:top}
 </style>
 
+<!-- <1!-- Drag and drop code --1> -->
+<!-- <script> -->
+<!-- function allowDrop(ev) { -->
+<!--     ev.preventDefault(); -->
+<!-- } -->
+
+<!-- function drag(ev) { -->
+<!--     ev.dataTransfer.setData("text", ev.target.id); -->
+<!-- } -->
+
+<!-- function drop(ev) { -->
+<!--     ev.preventDefault(); -->
+<!--     var data = ev.dataTransfer.getData("text"); -->
+<!--     ev.target.appendChild(document.getElementById(data)); -->
+<!-- } -->
+<!-- </script> -->
+
 </head>
 
-<!-- Drag and drop -->
-<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
-    <img src="{{ url_for('.static', filename='x.png') }}" draggable="true"
-              ondragstart="drag(event)" id="drag1">
-</div>
+<!-- <1!-- Drag and drop boxes --1> -->
+<!-- <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"> -->
+<!--     <img src="{{ url_for('.static', filename='x.png') }}" draggable="true" -->
+<!--               ondragstart="drag(event)" id="drag1"> -->
+<!-- </div> -->
+<!-- <div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"> -->
+<!--     <img src="{{ url_for('.static', filename='xerr.png') }}" draggable="true" -->
+<!--               ondragstart="drag(event)" id="drag2"> -->
+<!-- </div> -->
+<!-- <div id="div3" ondrop="drop(event)" ondragover="allowDrop(event)"> -->
+<!--     <img src="{{ url_for('.static', filename='y.png') }}" draggable="true" -->
+<!--               ondragstart="drag(event)" id="drag3"> -->
+<!-- </div> -->
+<!-- <div id="div4" ondrop="drop(event)" ondragover="allowDrop(event)"> -->
+<!--     <img src="{{ url_for('.static', filename='yerr.png') }}" draggable="true" -->
+<!--               ondragstart="drag(event)" id="drag4"> -->
+<!-- </div> -->
+<!-- <div id="div5" ondrop="drop(event)" ondragover="allowDrop(event)"> -->
+<!--     <img src="{{ url_for('.static', filename='z.png') }}" draggable="true" -->
+<!--               ondragstart="drag(event)" id="drag5"> -->
+<!-- </div> -->
+<!-- <div id="div6" ondrop="drop(event)" ondragover="allowDrop(event)"> -->
+<!--     <img src="{{ url_for('.static', filename='id.png') }}" draggable="true" -->
+<!--               ondragstart="drag(event)" id="drag6"> -->
+<!-- </div> -->
 
-<!-- <1!-- Plot link --1> -->
-<!-- <p><a href="{{ url_for('make_figure')}}"> -->
-<!--     PLOT -->
-<!-- </a></p> -->
+<!-- Plot link -->
+<h1><a href="{{ url_for('make_figure')}}">
+    PLOT
+</a></h1>
 
 <!-- Table -->
 <table class="tg">
 
-<tr>
-{% for i in range(ncolumns) %}
-        <th class="tg-yw4l"><div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div></th>
-    {% endfor %}
-</tr>
+<!-- <tr> -->
+<!-- {% for i in range(ncolumns) %} -->
+<!--         <th class="tg-yw4l"><div id="div7" ondrop="drop(event)" -->
+<!--                 ondragover="allowDrop(event)"></div></th> -->
+<!--     {% endfor %} -->
+<!-- </tr> -->
 
 {% for i in range(ncolumns) %}
     <th class="tg-yw4l">\({{ header_list[i] }}\)</th>
