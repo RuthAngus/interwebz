@@ -6,14 +6,13 @@ from arxiv import get_article
 from collections import OrderedDict
 from flask import Flask, request
 from flask import render_template
-from astropy.table import Table
+# from astropy.table import Table
 from flask import session
 from bokeh_plot import do_a_plot
 import pandas as pd
 
 app = Flask(__name__)
 
-secret_key = np.genfromtxt("secret_key.txt", dtype=str)
 app.secret_key = "23B9FD8E7EAE4964FD4F15F857DB7"
 
 # Render the front page
