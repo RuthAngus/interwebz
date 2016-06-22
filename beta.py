@@ -53,10 +53,10 @@ def select_variables(tnumber):
 @app.route('/figure')
 def make_figure():
     t = session.get("tab")  # load the json of the data
-    data = pd.read_json(t).as_matrix().T
-    headers = data[0]
-    table = make_html_fig(data)
-    return "{}".format(headers)
+    panda = pd.read_json(t)  # parse this to bokeh
+    arr = panda.as_matrix().T
+    table = make_html_fig(arr)
+    # return "{}".format(table)
     return render_template('html_tooltips.html')
 
 
