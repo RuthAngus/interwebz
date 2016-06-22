@@ -43,17 +43,18 @@ def select_variables(tnumber):
     headers = [i.replace("$", "") for i in headers]  # clean up data
     headers = [i.replace("\\", "") for i in headers]  # clean up data
     ncolumns, nrows = len(headers), len(data)
-    mydict = dict(zip(headers, data.T))
-    table = pd.DataFrame(mydict)
-    session["tab"] = table.to_json()
+    mydict = dict(zip(headers, data))  # make a dictionary of data
+    table = pd.DataFrame(mydict)  # make a pandas dataframe of data
+    session["tab"] = table.to_json()  # convert pandas df to json
     return render_template('table.html', header_list=headers, data=data,
                            ncolumns=ncolumns, nrows=nrows)
 
 # test inserting figure
 @app.route('/figure')
 def make_figure():
-    make_html_fig()
-    table = session.get("tab")
+    t = session.get("tab")  # load the json of the data
+    data = pd.read_json(t).as_matrix()
+    table = make_html_fig(t)
     return "{}".format(table)
     return render_template('html_tooltips.html')
 
