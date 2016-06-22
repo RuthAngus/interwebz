@@ -7,7 +7,7 @@ from flask import Flask, request
 from flask import render_template
 from astropy.table import Table
 from flask import session
-from bokeh import do_a_plot
+from bokeh_plot import do_a_plot
 import pandas as pd
 
 app = Flask(__name__)
