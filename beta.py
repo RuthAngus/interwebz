@@ -36,14 +36,7 @@ def scrape():
 # Display table and select variables
 @app.route('/table/<arxiv_number>/<int:tnumber>', methods=["GET", "POST"])
 def select_variables(arxiv_number, tnumber):
-    data_list, header_list, unit_list = load_tables(arxiv_number)
-    headers, data = header_list[tnumber], data_list[tnumber]  # select table
-    headers = [i.replace("$", "") for i in headers]  # clean up data
-    headers = [i.replace("\\", "") for i in headers]  # clean up data
-    ncolumns, nrows = len(headers), len(data)
-    mydict = dict(zip(headers, data.T))  # make a dictionary of data
-    table = pd.DataFrame(mydict)  # make a pandas dataframe of data
-    session["tab"] = table.to_json()  # convert pandas df to json
+    table, headers, data, ncolumns, nrows = format_data(arxiv_number, tnumber)
     return render_template('table.html', header_list=headers, data=data,
                            ncolumns=ncolumns, nrows=nrows,
                            arxiv_number=arxiv_number, tnumber=tnumber)
@@ -52,14 +45,26 @@ def select_variables(arxiv_number, tnumber):
 # test inserting figure
 @app.route('/table/<arxiv_number>/<int:tnumber>/figure')
 def make_figure(arxiv_number, tnumber):
-    data_list, header_list, unit_list = load_tables(arxiv_number)
+    table = format_data(arxiv_number, tnumber)
     # do_a_plot(table)
-    t = session.get("tab")  # load the json of the data
-    panda = pd.read_json(t)  # parse this to bokeh
-    arr = panda.as_matrix().T
-    table = make_html_fig(arr)
-    do_a_plot(panda)
+    # t = session.get("tab")  # load the json of the data
+    # panda = pd.read_json(t)  # parse this to bokeh
+    # arr = panda.as_matrix().T
+    # table = make_html_fig(arr)
+    # do_a_plot(panda)
     return render_template('callback.html')
+
+
+def format_data(arxiv_number, tnumber):
+    data_list, header_list, unit_list = load_tables(arxiv_number)
+    headers, data = header_list[tnumber], data_list[tnumber]  # select table
+    headers = [i.replace("$", "") for i in headers]  # clean up data
+    headers = [i.replace("\\", "") for i in headers]  # clean up data
+    ncolumns, nrows = len(headers), len(data)
+    mydict = dict(zip(headers, data.T))  # make a dictionary of data
+    table = pd.DataFrame(mydict)  # make a pandas dataframe of data
+    # session["tab"] = table.to_json()  # convert pandas df to json
+    return table, headers, data, ncolumns, nrows
 
 
 if __name__ == '__main__':
