@@ -2,13 +2,15 @@ from bokeh.io import vform
 from bokeh.models import CustomJS, ColumnDataSource
 from bokeh.models import Select, Button #, MultiSelect
 from bokeh.plotting import Figure, output_file, save
+
+import shutil
 # import pandas as pd
 
 # Usage: import do_a_plot and feed it a table
 # currently takes Pandas DataFrame as input; haven't tested
 # other formats such as astropy tables
 
-output_file("templates/callback.html") # currently writes to a file
+# output_file("templates/callback.html") # currently writes to a file
 # should change to output JS and HTML strings to pass to template
 
 def get_error_tuples(val,err,pos,alpha=0.6):
@@ -20,11 +22,16 @@ def get_error_tuples(val,err,pos,alpha=0.6):
 	#plot.multi_line(err_width, err_ypos, alpha=alpha)
 
 def do_a_plot(table):
+	#print table.columns
+	table.columns = [c.strip() for c in table.columns]
+	#df.columns = ['a', 'b']
 	column_list = list(table)
+	#print column_list
+	#print table[column_list[0]]
 	table['blank_x'] = '' # add fake columns for plotting
 	table['blank_y'] = ''
-	table['blank_x_err'] = ''
-	table['blank_y_err'] = ''
+	#table['blank_x_err'] = ''
+	#table['blank_y_err'] = ''
 	source = ColumnDataSource(data=dict(table))
 
 	plot = Figure(plot_width=500, plot_height=500)
@@ -35,8 +42,13 @@ def do_a_plot(table):
 		xaxis=plot.xaxis[0],
 		yaxis=plot.yaxis[0]), code="""
 	        var data = source.get('data');
-	        var f = cb_obj.get('value');
+	        var f = cb_obj.get('value').trim();
+	        console.log(f);
+	        for(var propertyName in data) {
+				console.log('name ' + propertyName + ', name_stripped ' + propertyName.trim());
+			}
 	        var axis = cb_obj.get('title')[0].toLowerCase();
+	        console.log(axis);
 	        if (axis == 'x') {
 	        	xaxis.set({"axis_label": f});
 	        } else if (axis == 'y') {
@@ -67,4 +79,6 @@ def do_a_plot(table):
 
 	layout = vform(select_x, select_y, reverse_x_button, reverse_y_button, plot)
 
+	output_file('bokeh_plot.html') # currently writes to a file
 	save(layout)
+	shutil.copy('bokeh_plot.html', 'templates/')

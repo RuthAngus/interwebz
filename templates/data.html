@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <!-- <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'> -->
-<link href='https://fonts.googleapis.com/css?family=Amatic+SC|Patua+One' rel='stylesheet' type='text/css'>
+<!-- <link href='https://fonts.googleapis.com/css?family=Amatic+SC|Patua+One' rel='stylesheet' type='text/css'> -->
 
 <html>
 <head>
@@ -14,7 +14,8 @@
 <h1>{{ ntables }} Tables found</h1>
 
 {% for table in range(ntables) %}
-    <p><a href="{{ url_for('select_variables', tnumber=table)}}">
+    <p><a href="{{ url_for('select_variables', arxiv_number=arxiv_number,
+                 tnumber=table)}}">
      Table {{ table + 1 }}
     </a></p>
 {% endfor %}
