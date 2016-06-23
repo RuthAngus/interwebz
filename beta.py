@@ -10,6 +10,7 @@ from flask import render_template
 from flask import session
 from bokeh_plot import do_a_plot
 import pandas as pd
+import pickle
 
 app = Flask(__name__)
 
@@ -46,7 +47,6 @@ def select_variables(arxiv_number, tnumber):
 @app.route('/table/<arxiv_number>/<int:tnumber>/figure')
 def make_figure(arxiv_number, tnumber):
     table, headers, data, ncolumns, nrows = format_data(arxiv_number, tnumber)
-    #print table
     do_a_plot(table)
     # t = session.get("tab")  # load the json of the data
     # panda = pd.read_json(t)  # parse this to bokeh
