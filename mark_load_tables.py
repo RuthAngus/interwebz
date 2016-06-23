@@ -19,6 +19,7 @@ URL = "http://arxiv.org/rss/astro-ph"
 COMMENT_RE = re.compile(r"(?<!\\)%")
 AMP_RE = re.compile(r"(?<!\\)&")
 
+DATA_DIR = os.environ.get("ARXIV_DATA_DIR", "data")
 
 def clean_string(tab):
   # First deal with multiple spaces at front of line
