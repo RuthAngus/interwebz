@@ -1,7 +1,8 @@
 from bokeh.io import vform
 from bokeh.models import CustomJS, ColumnDataSource
-from bokeh.models import Select, Button #, MultiSelect
+from bokeh.models import Select, Button, HBox, VBoxForm
 from bokeh.plotting import Figure, output_file, save
+from bokeh.io import curdoc
 
 import shutil
 # import pandas as pd
@@ -34,7 +35,7 @@ def do_a_plot(table):
 	#table['blank_y_err'] = ''
 	source = ColumnDataSource(data=dict(table))
 
-	plot = Figure(plot_width=500, plot_height=500)
+	plot = Figure(plot_width=650, plot_height=650)
 	scatter = plot.scatter('blank_x', 'blank_y', source=source, _changing=True)
 	# line = plot.line('blank_x', 'blank_y', source=source, visible=False, _changing=True)
 
@@ -74,11 +75,17 @@ def do_a_plot(table):
 
 	select_x = Select(title="X Options:", value=column_list[0], options=column_list, callback=main_callback)
 	select_y = Select(title="Y Options:", value=column_list[0], options=column_list, callback=main_callback)
+	select_c = Select(title="Color Weight:", value=column_list[0], options=column_list, callback=main_callback)	
+	select_r = Select(title="Size Weight:", value=column_list[0], options=column_list, callback=main_callback)	
 	reverse_x_button = Button(label="Reverse X range", type="success", callback=reverse_x_callback)
 	reverse_y_button = Button(label="Reverse Y range", type="success", callback=reverse_y_callback)
 
-	layout = vform(select_x, select_y, reverse_x_button, reverse_y_button, plot)
+	# layout = vform(select_x, select_y, reverse_x_button, reverse_y_button, plot)
+	
+	controls = [select_x, select_y, select_c, select_r, reverse_x_button, reverse_y_button]
+	inputs = HBox(VBoxForm(*controls))
+	curdoc().add_root(HBox(inputs, plot))
 
 	output_file('bokeh_plot.html') # currently writes to a file
-	save(layout)
+	save(curdoc())
 	shutil.copy('bokeh_plot.html', 'templates/')
