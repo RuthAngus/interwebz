@@ -1,6 +1,7 @@
 # http://127.0.0.1:5000/
 import numpy as np
-from load_tables import load_tables
+# from load_tables import load_tables
+from mark_load_tables import load_tables
 #from html_tooltips import make_html_fig
 from arxiv import get_article
 from collections import OrderedDict
