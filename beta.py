@@ -29,9 +29,14 @@ def scrape():
     arxiv_number = str(request.form["arxiv_number"])
     get_article("{0}".format(arxiv_number))
     data_list, header_list, unit_list = load_tables(arxiv_number)
+    if len(header_list):
+        header = "{0}".format(header_list[0])
+        data="{0}".format(data_list[0]),
+    else:
+        header = "{0}".format(header_list)
+        data="{0}".format(data_list),
     return render_template('data.html', ntables=len(data_list),
-                           header="{0}".format(header_list[0]),
-                           data="{0}".format(data_list[0]),
+                           header=header, data=data,
                            arxiv_number=arxiv_number)
 
 
