@@ -58,8 +58,9 @@ def split_errors(table):
             do_split = False
             for entry in table[col_name]:
                 if entry.find(repl_str) >= 0:
-                    do_split = True
-                    break
+                    if len(((entry.replace(" ","")).replace(repl_str,np.str_(" "))).split()) == 2:
+                        do_split = True
+                        break
             if do_split :
                 new_col_name = col_name + "Data"
                 new_col_error_name = new_col_name + "Err"
@@ -71,7 +72,7 @@ def split_errors(table):
                         try:
                             new_data = np.float64(entry)
                         except:
-                            new_data = np.nan
+                            new_data = entry
                         new_error = np.nan
                     else:
                         new_entry = (entry.replace(repl_str,np.str_(" "))).split()
@@ -123,7 +124,7 @@ def extract_tables_other(fh):
                         tex_tab = split_errors(tex_tab)
                     except:
                         print("Sorry! A table could not be read.\n ")
-                        pdb.set_trace()
+#                        pdb.set_trace()
                         tex_tab = table_stub()
                         tex_tab.colnames = ["Error_Table"]
 
