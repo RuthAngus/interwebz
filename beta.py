@@ -1,7 +1,7 @@
 # http://127.0.0.1:5000/
 import numpy as np
 # from load_tables import load_tables
-from mark_load_tables import load_tables
+from load_tables import load_tables
 #from html_tooltips import make_html_fig
 from arxiv import get_article
 from collections import OrderedDict
@@ -49,13 +49,14 @@ def select_variables(arxiv_number, tnumber):
 @app.route('/table/<arxiv_number>/<int:tnumber>/figure')
 def make_figure(arxiv_number, tnumber):
     table, headers, data, ncolumns, nrows = format_data(arxiv_number, tnumber)
-    do_a_plot(table)
+    script, div = do_a_plot(table)
     # t = session.get("tab")  # load the json of the data
     # panda = pd.read_json(t)  # parse this to bokeh
     # arr = panda.as_matrix().T
     # table = make_html_fig(arr)
     # do_a_plot(panda)
-    return render_template('bokeh_plot.html')
+    return render_template('bokeh_template.html', arxiv_number=arxiv_number,
+        tnumber=tnumber+1, script=script, div=div)
 
 
 def format_data(arxiv_number, tnumber):

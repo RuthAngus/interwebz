@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{{arxiv_number}}, Table {{tnumber}} Interactive Plot</title>
+        
+		<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.11.1.min.css" type="text/css" />
+		<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.11.1.min.css" type="text/css" />
+		        
+		<script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.11.1.min.js"></script>
+		<script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.11.1.min.js"></script>
+		<script type="text/javascript">
+		    Bokeh.set_log_level("info");
+		</script>
+		<style type="text/css">
+		button.bk-bs-btn {
+			margin:0 4px;
+		}
+		/*form.bk-widget-form > div {
+		    margin:4px 0;
+		}*/
+		select.bk-widget-form-input {
+			margin-bottom:20px;
+		}
+		div.bk-slider-horizontal {
+			height:40px;
+		}
+		.bk-hbox {
+			display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+			display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+			display: -ms-flexbox;      /* TWEENER - IE 10 */
+			display: -webkit-flex;     /* NEW - Chrome */
+			display:flex;
+		    -webkit-justify-content: center;
+    		justify-content:center;
+    		margin-bottom:2em;
+		}
+		</style>
+
+    </head>
+    <body>
+
+	    <h3 style="text-align:center;">Arxiv:{{arxiv_number}}, Table {{tnumber}} Interactive Plot</h3>
+
+		{{ div|safe }}
+		{{ script|safe }}
+
+	</body>
+</html>
