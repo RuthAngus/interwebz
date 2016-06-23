@@ -15,10 +15,13 @@ import os
 import sys
 from astropy.table import Table
 
+from contextlib import closing
+
 URL = "http://arxiv.org/rss/astro-ph"
 COMMENT_RE = re.compile(r"(?<!\\)%")
 AMP_RE = re.compile(r"(?<!\\)&")
 
+<<<<<<< HEAD
 class table_stub():
     def __init__(self):
         self.colnames = []
@@ -80,6 +83,9 @@ def split_errors(table):
                     new_index = new_index + 1
                 table.remove_column(col_name)
     return table
+=======
+DATA_DIR = os.environ.get("ARXIV_DATA_DIR", "data")
+>>>>>>> a9586a053f079a9f50339c095e59ef36833f294a
 
 def run():
     tree = feedparser.parse(URL)
@@ -229,23 +235,40 @@ def extract_tables(fh):
         for mem in f.getmembers():
             if not fnmatch.fnmatch(mem.name, "*.tex"):
                 continue
-            #with f.extractfile(mem) as txtf:
-            txtf = f.extractfile(mem)
-#            print(type(txtf))
-            txt = txtf.read()
-            txtf.close()
-            txt = txt.decode("utf-8")
+            if sys.version_info < (3, 0):
+                txtf = f.extractfile(mem)
+#               print(type(txtf))
+                txt = txtf.read()
+                txtf.close()
+                txt = txt.decode("utf-8")
 
-            # detect table line positions
-            tables = []
-            lines = np.array(txt.splitlines())
-            for i, line in enumerate(lines):
-                if line[1:12] == "begin{table" or \
-                        line[1:18] == "begin{deluxetable":
-                    beg_ind = i
-                elif line[1:10] == "end{table" or \
-                    line[1:16] == "end{deluxetable":
-                    end_ind = i
+                # detect table line positions
+                tables = []
+                lines = np.array(txt.splitlines())
+                for i, line in enumerate(lines):
+                    if line[1:12] == "begin{table" or \
+                      line[1:18] == "begin{deluxetable":
+                        beg_ind = i
+                    elif line[1:10] == "end{table" or \
+                      line[1:16] == "end{deluxetable":
+                        end_ind = i
+#                    pdb.set_trace()
+                    tables.append(lines[beg_ind:end_ind])
+            else:
+                with closing(f.extractfile(mem)) as txtf:
+                    txt = txtf.read()
+                txt = txt.decode("utf-8")
+
+                # detect table line positions
+                tables = []
+                lines = np.array(txt.splitlines())
+                for i, line in enumerate(lines):
+                    if line[1:12] == "begin{table" or \
+                      line[1:18] == "begin{deluxetable":
+                        beg_ind = i
+                    elif line[1:10] == "end{table" or \
+                      line[1:16] == "end{deluxetable":
+                        end_ind = i
 #                    pdb.set_trace()
                     tables.append(lines[beg_ind:end_ind])
     return tables
@@ -319,7 +342,7 @@ def load_tables(arxiv_number):
     Takes an ArXiv id and returns a list of arrays.
     Each array contains the data in a table in the paper.
     """
-    file = "data/{0}.tar.gz".format(str(arxiv_number))
+    file = os.path.join(DATA_DIR, "{0}.tar.gz".format(str(arxiv_number)))
     with open(file, "rb") as f:
         tables = extract_tables_other(f)
     data_list, header_list, unit_list = [], [], []
