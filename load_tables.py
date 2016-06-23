@@ -20,8 +20,8 @@ from contextlib import closing
 URL = "http://arxiv.org/rss/astro-ph"
 COMMENT_RE = re.compile(r"(?<!\\)%")
 AMP_RE = re.compile(r"(?<!\\)&")
+DATA_DIR = os.environ.get("ARXIV_DATA_DIR", "data")
 
-<<<<<<< HEAD
 class table_stub():
     def __init__(self):
         self.colnames = []
@@ -83,9 +83,6 @@ def split_errors(table):
                     new_index = new_index + 1
                 table.remove_column(col_name)
     return table
-=======
-DATA_DIR = os.environ.get("ARXIV_DATA_DIR", "data")
->>>>>>> a9586a053f079a9f50339c095e59ef36833f294a
 
 def run():
     tree = feedparser.parse(URL)
