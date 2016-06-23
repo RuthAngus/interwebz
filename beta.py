@@ -49,23 +49,15 @@ def select_variables(arxiv_number, tnumber):
 def make_figure(arxiv_number, tnumber):
     table, headers, data, ncolumns, nrows = format_data(arxiv_number, tnumber)
     do_a_plot(table)
-    # t = session.get("tab")  # load the json of the data
-    # panda = pd.read_json(t)  # parse this to bokeh
-    # arr = panda.as_matrix().T
-    # table = make_html_fig(arr)
-    # do_a_plot(panda)
     return render_template('bokeh_plot.html')
 
 
 def format_data(arxiv_number, tnumber):
-    data_list, header_list, unit_list = load_tables(arxiv_number)
-    headers, data = header_list[tnumber], data_list[tnumber]  # select table
-    headers = [i.replace("$", "") for i in headers]  # clean up data
-    headers = [i.replace("\\", "") for i in headers]  # clean up data
+    header_list, data_list, unit_list = load_tables(arxiv_number)
+    headers, data = header_list[tnumber], np.array(data_list[tnumber]) # select table
     ncolumns, nrows = len(headers), len(data)
     mydict = OrderedDict(zip(headers, data.T))  # make a dictionary of data
     table = pd.DataFrame(mydict)  # make a pandas dataframe of data
-    # session["tab"] = table.to_json()  # convert pandas df to json
     return table, headers, data, ncolumns, nrows
 
 

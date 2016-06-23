@@ -66,7 +66,7 @@ def split_errors(table):
                             new_data = np.nan
                         new_error = np.nan
                     else:
-                        new_entry = string.split(string.replace(entry,repl_str,np.str_(" ")))
+                        new_entry = (entry.replace(repl_str,np.str_(" "))).split()
                         new_data = np.float64(new_entry[0])
                         new_error = np.float64(new_entry[1])
                     table[new_col_name][new_index] = new_data
