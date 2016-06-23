@@ -35,7 +35,7 @@ def parse_tex(tex):
             body = txt_f.read().decode("utf-8")
 
     # Parse the HTML.
-    tree = BeautifulSoup(body)
+    tree = BeautifulSoup(body, "html.parser")
     paragraphs = []
     for p in tree.find_all("p"):
         txt = p.text
