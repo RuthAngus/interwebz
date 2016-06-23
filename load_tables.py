@@ -58,7 +58,7 @@ def split_errors(table):
         if type(table[col_name][0]) == type(np.str_()) :
             do_split = False
             for entry in table[col_name]:
-                if string.find(entry,repl_str) >= 0:
+                if entry.find(repl_str) >= 0:
                     do_split = True
                     break
             if do_split :
@@ -68,7 +68,7 @@ def split_errors(table):
                 table[new_col_error_name] = np.zeros(len(table[col_name]),dtype=np.float64)
                 new_index = 0
                 for entry in table[col_name]:
-                    if string.find(entry,repl_str) < 0:
+                    if entry.find(repl_str) < 0:
                         try:
                             new_data = np.float64(entry)
                         except:
