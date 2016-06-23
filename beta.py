@@ -61,8 +61,8 @@ def make_figure(arxiv_number, tnumber):
 def format_data(arxiv_number, tnumber):
     header_list, data_list, unit_list = load_tables(arxiv_number)
     headers, data = header_list[tnumber], np.array(data_list[tnumber]) # select table
-    ncolumns, nrows = len(headers), len(data)
-    mydict = OrderedDict(zip(headers, data))  # make a dictionary of data
+    ncolumns, nrows = len(headers), np.shape(data)[0]
+    mydict = OrderedDict(zip(headers, data.T))  # make a dictionary of data
     table = pd.DataFrame(mydict)  # make a pandas dataframe of data
     return table, headers, data, ncolumns, nrows
 
