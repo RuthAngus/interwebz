@@ -14,18 +14,25 @@ import numpy as np
 import os
 import sys
 from astropy.table import Table
+from contextlib import closing
 
 URL = "http://arxiv.org/rss/astro-ph"
 COMMENT_RE = re.compile(r"(?<!\\)%")
 AMP_RE = re.compile(r"(?<!\\)&")
-
 DATA_DIR = os.environ.get("ARXIV_DATA_DIR", "data")
+
+class table_stub():
+    def __init__(self):
+        self.colnames = []
+    def __getitem__(self,field):
+        return [0.]
 
 def clean_string(tab):
   # First deal with multiple spaces at front of line
   tab = tab.expandtabs()
   tab = re.sub("\\\\hline","",tab)
   tab = re.sub("\$","",tab)
+  tab = re.sub("\\%","",tab)
   tab = re.sub(" *\n","\n",tab)
   tab = re.sub("(?<!\\\\\\\\)\n","",tab)
   tab = re.sub("(?<!\n) *\\\\caption","\n\\\\caption",tab)
@@ -89,7 +96,6 @@ def extract_tables_other(fh):
             if not fnmatch.fnmatch(mem.name, "*.tex"):
                 continue
             txtf = f.extractfile(mem)
-#            print(type(txtf))
             txt = txtf.read()
             txtf.close()
             txt = txt.decode("utf-8")
@@ -106,23 +112,25 @@ def extract_tables_other(fh):
 
                 if ind2 > 0:
                     tab = txt[ind1:ind2+len(r'\end{table}')+1]
-        #            pdb.set_trace()
                     tab = clean_string(tab)
-                    #print(tab)
-        #            pdb.set_trace()
                     f = open("temp.tex",'w')
                     f.write(tab)
                     f.close()
 
-                    #pdb.set_trace()
-                    tex_tab = Table.read("temp.tex",format='latex',guess=False)
-                    os.remove("temp.tex")
-        #            pdb.set_trace()
-                    tex_tab = split_errors(tex_tab)
-        #            pdb.set_trace()
+                    try:
+                        tex_tab = Table.read("temp.tex",format='latex',guess=False)
+                        os.remove("temp.tex")
+                        tex_tab = split_errors(tex_tab)
+                    except:
+                        print("Sorry! A table could not be read.\n ")
+                        pdb.set_trace()
+                        tex_tab = table_stub()
+                        tex_tab.colnames = ["Error_Table"]
+
+
                     tables.append(tex_tab)
-                    if len(tables) == 2:
-                        break
+#                    if len(tables) == 3:
+#                        break
 
             # table
             ind1 = -1
@@ -135,20 +143,25 @@ def extract_tables_other(fh):
                 if ind2 > 0:
                     tab = txt[ind1:ind2+len(r'\end{deluxetable}')+1]
                     tab = clean_string(tab)
-                    #print(tab)
-                    pdb.set_trace()
                     f = open("temp.tex",'w')
                     f.write(tab)
                     f.close()
 
-                    #pdb.set_trace()
-                    tex_tab = Table.read("temp.tex",format='ascii.aastex',guess=False)
-                    os.remove("temp.tex")
-                    tex_tab = split_errors(tex_tab)
+                    try:
+                        tex_tab = Table.read("temp.tex",format='latex',guess=False)
+                        os.remove("temp.tex")
+                        tex_tab = split_errors(tex_tab)
+                    except:
+                        print("Sorry! A deluxetable could not be read.\n ")
+#                        pdb.set_trace()
+                        tex_tab = table_stub()
+                        tex_tab.colnames = ["Error_DeluxeTable"]
+
+
                     tables.append(tex_tab)
 
             # table
-            ind1 = -1
+            ind1 = 0
             ind2 = 0
             while ind1 >= 0:
                 ind1 = txt.find(r'\begin{table*}',0+ind1+1)
@@ -158,16 +171,21 @@ def extract_tables_other(fh):
                 if ind2 > 0:
                     tab = txt[ind1:ind2+len(r'\end{table*}')+1]
                     tab = clean_string(tab)
-                    #print(tab)
-                    pdb.set_trace()
                     f = open("temp.tex",'w')
                     f.write(tab)
                     f.close()
 
-                    #pdb.set_trace()
-                    tex_tab = Table.read("temp.tex",format='latex')
-                    os.remove("temp.tex")
-                    tex_tab = split_errors(tex_tab)
+                    try:
+                        tex_tab = Table.read("temp.tex",format='latex',guess=False)
+                        os.remove("temp.tex")
+                        tex_tab = split_errors(tex_tab)
+                    except:
+                        print("Sorry! A table* could not be read.\n ")
+#                        pdb.set_trace()
+                        tex_tab = table_stub()
+                        tex_tab.colnames = ["Error_Table*"]
+
+
                     tables.append(tex_tab)
 
             # table
@@ -181,16 +199,21 @@ def extract_tables_other(fh):
                 if ind2 > 0:
                     tab = txt[ind1:ind2+len(r'\end{deluxetable*}')+1]
                     tab = clean_string(tab)
-                    #print(tab)
-                    pdb.set_trace()
                     f = open("temp.tex",'w')
                     f.write(tab)
                     f.close()
 
-                    #pdb.set_trace()
-                    tex_tab = Table.read("temp.tex",format='ascii.aastex',guess=False)
-                    os.remove("temp.tex")
-                    tex_tab = split_errors(tex_tab)
+                    try:
+                        tex_tab = Table.read("temp.tex",format='latex',guess=False)
+                        os.remove("temp.tex")
+                        tex_tab = split_errors(tex_tab)
+                    except:
+                        print("Sorry! A deluxetable* could not be read.\n ")
+    #                    pdb.set_trace()
+                        tex_tab = table_stub()
+                        tex_tab.colnames = ["Error_DeluxeTable*"]
+
+
                     tables.append(tex_tab)
 
             return tables
@@ -307,6 +330,7 @@ def load_tables(arxiv_number):
         data_list.append(dat)
         header_list.append(head)
         unit_list.append(unit)
+#    pdb.set_trace()
     return data_list, header_list, unit_list
 
 
