@@ -255,7 +255,7 @@ def extract_tables(fh):
 def read_table_other(table):
     head = table.colnames
     for h in head:
-        h.replace("\\","")
+        h.replace("\\\\","")
         h.replace("_","")
         h.replace("\^","")
     data = np.zeros([len(table[table.colnames[0]]), len(table.colnames)])
