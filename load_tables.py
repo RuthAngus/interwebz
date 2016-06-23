@@ -254,19 +254,20 @@ def extract_tables(fh):
 
 def read_table_other(table):
     head = table.colnames
-    data = np.zeros([len(table[table.colnames[0]]),len(table.colnames)])
+    data = np.zeros([len(table.colnames),len(table[table.colnames[0]])])
+    dlist = [list(i) for i in data]
     i=0
     for colname in table.colnames:
         j=0
         for entry in table[colname]:
             try:
-                data[j,i] = np.float64(entry)
+                dlist[i][j] = np.float64(entry)
             except:
-                data[j,i] = np.nan
+                dlist[i][j] = entry
             j = j + 1
         i = i + 1
     units = ['unit']*len(head)
-    return head, data, units
+    return head, dlist, units
 
 def read_table(table):
     """
